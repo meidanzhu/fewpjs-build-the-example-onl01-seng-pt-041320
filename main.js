@@ -3,7 +3,50 @@ const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
+// On Load
+document.addEventListener("DOMContentLoaded", function()  {
+  toggleError()
+  findHeartButtons()
+})
 
+// Like Button Event Listener
+function findHeartButtons() {
+  const heartButtons = document.querySelectorAll('.like-glyph')
+  heartButtons.forEach((heartButton) => {
+    heartButton.addEventListener('click', function(e) {
+      mimicServerCall()
+      .then(function(response) {
+        console.log(response)
+        toggleHeart(heartButton)
+      })
+      .catch(error => {
+        toggleError(error)
+      })
+    })
+  })
+}
+
+// Functions
+
+function toggleHeart(heartButton) {
+  if (heartButton.innerText === EMPTY_HEART) {
+    heartButton.innerText = FULL_HEART
+    heartButton.className = 'activated-heart'
+  } else {
+    heartButton.innerText = EMPTY_HEART
+  }
+}
+// needed to pass test, otherwise would be in toggleError function
+const errorDiv = document.querySelector('#modal')
+errorDiv.className = 'hidden'
+
+function toggleError(error) {
+  if (error) {
+    errorDiv.textContent = error
+    errorDiv.className = 'visible'
+    setTimeout(() => { errorDiv.className = 'hidden'; }, 5000);
+  }
+}
 
 
 
